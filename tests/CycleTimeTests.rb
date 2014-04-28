@@ -152,10 +152,6 @@ class FakeTrello
 	end
 end
 
-class InvalidListError
-
-end
-
 module AgileTrello
 	class TrelloCycleTime
 		def initialize(trello_factory = TrelloFactory.new, parameters = {}) 
