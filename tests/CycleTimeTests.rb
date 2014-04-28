@@ -58,6 +58,24 @@ class CycleTimeTests < Test::Unit::TestCase
 		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(2.0)
 	end
 
+	def test_cycle_time_returned_rounded_to_2_decimial_places_when_board_has_both_start_and_end_lists_and_card_is_in_end_list
+		board_id = SecureRandom.uuid
+		start_list_name = 'start list'
+		end_list_name = 'end list'
+		fake_card = FakeCard.new 
+		fake_card.add_movement(list_name: start_list_name, date: Time.new(2002, 10, 01, '11:00'))
+		fake_card.add_movement(list_name: end_list_name, date: Time.new(2002, 10, 03))
+		board_with_start_and_end_lists = FakeBoard.new
+		board_with_start_and_end_lists.add(FakeList.new('start list'))
+		end_list = FakeList.new('end list')
+		end_list.add(fake_card)
+		board_with_start_and_end_lists.add(end_list)
+		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_start_and_end_lists)
+		mockTrelloFactory = self
+		trello_cycle_time = TrelloCycleTime.new(mockTrelloFactory)
+		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(1.54)
+	end
+
 	def create(trello_credentials)
 		@trello_credentials = trello_credentials
 		@created_trello
@@ -197,7 +215,7 @@ module AgileTrello
 		attr_reader :cycle_time
 
 		def initialize(start_date, end_date)
-			@cycle_time = (end_date - start_date) / SECONDS_IN_24HRS
+			@cycle_time = ((end_date - start_date) / SECONDS_IN_24HRS).round(2)
 		end
 	end
 
