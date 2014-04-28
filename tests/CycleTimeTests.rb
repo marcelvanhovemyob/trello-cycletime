@@ -2,6 +2,7 @@ require 'test/unit'
 require 'rspec-expectations'
 require 'SecureRandom'
 require_relative '../lib/TrelloFactory'
+require_relative '../lib/TrelloCredentials'
 
 class CycleTimeTests < Test::Unit::TestCase	
 	def test_user_connects_to_trello_with_public_key
