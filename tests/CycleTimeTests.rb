@@ -18,15 +18,33 @@ class CycleTimeTests < Test::Unit::TestCase
 		expect(@trello_credentials.access_token).to eql(access_token)
 	end 
 
+	def test_trello_board_retrieved_by_id
+		board_id = SecureRandom.uuid
+		@created_trello = self
+		mockTrelloFactory = self
+		trello_cycle_time = TrelloCycleTime.new(mockTrelloFactory)
+		trello_cycle_time.get(board_id: board_id)
+		expect(@retrieved_board_id).to eql(board_id)
+	end
+
 	def create(trello_credentials)
 		@trello_credentials = trello_credentials
+		@created_trello
+	end
+
+	def get_board(board_id)
+		@retrieved_board_id = board_id
 	end
 end
 
 class TrelloCycleTime
-	def initialize(trello_factory = TrelloFactory.new, parameters) 
+	def initialize(trello_factory = TrelloFactory.new, parameters = {}) 
 		trello_credentials = TrelloCredentials.new(parameters[:public_key], parameters[:access_token])
-		trello_factory.create(trello_credentials) 
+		@trello = trello_factory.create(trello_credentials) 
+	end
+
+	def get(parameters)
+		@trello.get_board(parameters[:board_id])
 	end
 end
 
