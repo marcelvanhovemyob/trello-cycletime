@@ -8,7 +8,7 @@ require_relative '../lib/TrelloCredentials'
 
 class CycleTimeTests < Test::Unit::TestCase	
 	include AgileTrello
-	
+
 	def test_user_connects_to_trello_with_public_key
 		public_key = SecureRandom.uuid
 		mockTrelloFactory = self
@@ -31,15 +31,6 @@ class CycleTimeTests < Test::Unit::TestCase
 		trello_cycle_time.get(board_id: board_id)
 		expect(@retrieved_board_id).to eql(board_id)
 	end
-
-	# def test_error_raised_when_start_list_does_not_exist
-	# 	board_id = SecureRandom.uuid
-	# 	board_without_start_list = {}
-	# 	@created_trello = FakeTrello.new(board_id: board_id, board: board_without_start_list)
-	# 	mockTrelloFactory = self
-	# 	trello_cycle_time = TrelloCycleTime.new(mockTrelloFactory)
-	# 	trello_cycle_time.get(board_id: board_id).should raise_error(InvalidListError, 'Invalid Start List')
-	# end
 
 	def create(trello_credentials)
 		@trello_credentials = trello_credentials
