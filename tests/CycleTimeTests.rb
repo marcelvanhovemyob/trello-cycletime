@@ -4,6 +4,7 @@ require 'SecureRandom'
 require_relative '../lib/TrelloFactory'
 require_relative '../lib/TrelloCredentials'
 require_relative '../lib/CompletedCard'
+require_relative '../lib/CardRepository'
 
 class CycleTimeTests < Test::Unit::TestCase	
 	include AgileTrello
@@ -210,19 +211,5 @@ module AgileTrello
 		end
 	end
 
-	class CardRepository
-		def initialize(trello, parameters)
-			@trello_board = trello.get_board(parameters[:board_id])
-		end
-
-		def get_cards_after
-			cards_after = []
-			@trello_board.lists.each do | list | 
-				list.cards.each do | card |
-					cards_after.push(card)
-				end
-			end 
-			return cards_after
-		end
-	end
+	
 end
