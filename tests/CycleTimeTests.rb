@@ -32,6 +32,25 @@ class CycleTimeTests < Test::Unit::TestCase
 		expect(@retrieved_board_id).to eql(board_id)
 	end
 
+	def test_zero_returned_when_no_lists_on_board
+		board_id = SecureRandom.uuid
+		board_with_no_lists = FakeBoard.new
+		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_no_lists)
+		mockTrelloFactory = self
+		trello_cycle_time = TrelloCycleTime.new(mockTrelloFactory)
+		trello_cycle_time.get(board_id: board_id).should eql(0)
+	end
+
+	def test_zero_returned_when_board_has_lists_but_no_cards
+		board_id = SecureRandom.uuid
+		board_with_no_cards = FakeBoard.new
+		board_with_no_cards.add(FakeList.new('a list'))
+		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_no_cards)
+		mockTrelloFactory = self
+		trello_cycle_time = TrelloCycleTime.new(mockTrelloFactory)
+		trello_cycle_time.get(board_id: board_id).should eql(0)
+	end
+
 	def create(trello_credentials)
 		@trello_credentials = trello_credentials
 		@created_trello
@@ -39,6 +58,27 @@ class CycleTimeTests < Test::Unit::TestCase
 
 	def get_board(board_id)
 		@retrieved_board_id = board_id
+	end
+end
+
+class FakeBoard
+	attr_reader :lists 
+
+	def initialize 
+		@lists = []
+	end
+
+	def add(list)
+		@lists.push(list)
+	end
+end
+
+class FakeList
+	attr_reader :name, :cards
+
+	def initialize(name)
+		@name = name
+		@cards = []
 	end
 end
 
@@ -67,6 +107,7 @@ module AgileTrello
 
 		def get(parameters)
 			@trello.get_board(parameters[:board_id])
+			0
 		end
 	end
 end
