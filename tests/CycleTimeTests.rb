@@ -154,32 +154,46 @@ module AgileTrello
 	class CompletedCardRepository
 		def initialize(trello, parameters)
 			@card_repository = CardRepository.new(trello, parameters)
-			@trello_board = trello.get_board(parameters[:board_id])
-			@start_list = parameters[:start_list]
-			@end_list = parameters[:end_list]
+			@completed_card_factory = CompletedCardFactory.new(start_list: parameters[:start_list], end_list: parameters[:end_list])
 		end
 
 		def get
 			completed_cards = @card_repository.get_cards_after
 			return [] if completed_cards.length == 0
-			card_movements = completed_cards[0].actions.select do | action |
-				action.type == 'updateCard' && !action.data['listAfter'].nil?
+			completed_card = @completed_card_factory.create(completed_cards[0])
+			[completed_card]
+		end
+	end
+
+	class CompletedCardFactory
+		MOVEMENT_ACTION_TYPE = 'updateCard'
+		MOVEMENT_DATA_ATTRIBUTE = 'listAfter'
+		MOVEMENT_DATA_LIST_NAME = 'name'
+
+		def initialize(parameters)
+			@start_list = parameters[:start_list]
+			@end_list = parameters[:end_list]
+		end
+
+		def create(trello_card)
+			card_movements = trello_card.actions.select do | action |
+				action.type == MOVEMENT_ACTION_TYPE && !action.data[MOVEMENT_DATA_ATTRIBUTE].nil?
 			end
 
 			start_date = nil
 			end_date = nil
 			card_movements.each do |movement|
-				start_date = movement.date if movement.data['listAfter']['name'].include?(@start_list)
-				end_date = movement.date if movement.data['listAfter']['name'].include?(@end_list)
+				start_date = movement.date if movement.data[MOVEMENT_DATA_ATTRIBUTE][MOVEMENT_DATA_LIST_NAME].include?(@start_list)
+				end_date = movement.date if movement.data[MOVEMENT_DATA_ATTRIBUTE][MOVEMENT_DATA_LIST_NAME].include?(@end_list)
 			end
 
-			[CompletedCard.new(start_date, end_date)]
+			CompletedCard.new(start_date, end_date)
 		end
 	end
 
 	class CompletedCard
 		SECONDS_IN_24HRS = (24 * 60 * 60)
-		
+
 		attr_reader :cycle_time
 
 		def initialize(start_date, end_date)
