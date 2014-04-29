@@ -9,6 +9,8 @@ require_relative '../lib/CardRepository'
 class CycleTimeTests < Test::Unit::TestCase	
 	include AgileTrello
 
+	ONE_DAY = 86400
+
 	def test_user_connects_to_trello_with_public_key
 		public_key = SecureRandom.uuid
 		mockTrelloFactory = self
@@ -47,8 +49,10 @@ class CycleTimeTests < Test::Unit::TestCase
 		start_list_name = 'start list'
 		end_list_name = 'end list'
 		fake_card = FakeCard.new 
-		fake_card.add_movement(list_name: start_list_name, date: Time.new(2002, 10, 01))
-		fake_card.add_movement(list_name: end_list_name, date: Time.new(2002, 10, 03))
+		today = Time.now
+		two_days_ago = today - (ONE_DAY * 2)
+		fake_card.add_movement(list_name: start_list_name, date: two_days_ago)
+		fake_card.add_movement(list_name: end_list_name, date: today)
 		board_with_start_and_end_lists = FakeBoard.new
 		board_with_start_and_end_lists.add(FakeList.new('start list'))
 		end_list = FakeList.new('end list')
@@ -65,8 +69,10 @@ class CycleTimeTests < Test::Unit::TestCase
 		start_list_name = 'start list'
 		end_list_name = 'end list'
 		fake_card = FakeCard.new 
-		fake_card.add_movement(list_name: start_list_name, date: Time.new(2002, 10, 01, '11:00'))
-		fake_card.add_movement(list_name: end_list_name, date: Time.new(2002, 10, 03))
+		today = Time.now
+		two_and_a_bit_days_ago = today - (ONE_DAY * 2.54)
+		fake_card.add_movement(list_name: start_list_name, date: two_and_a_bit_days_ago)
+		fake_card.add_movement(list_name: end_list_name, date: today)
 		board_with_start_and_end_lists = FakeBoard.new
 		board_with_start_and_end_lists.add(FakeList.new('start list'))
 		end_list = FakeList.new('end list')
@@ -75,7 +81,7 @@ class CycleTimeTests < Test::Unit::TestCase
 		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_start_and_end_lists)
 		mockTrelloFactory = self
 		trello_cycle_time = TrelloCycleTime.new(mockTrelloFactory)
-		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(1.54)
+		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(2.54)
 	end
 
 	def create(trello_credentials)
