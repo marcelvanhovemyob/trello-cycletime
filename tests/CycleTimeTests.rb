@@ -1,11 +1,7 @@
 require 'test/unit'
 require 'rspec-expectations'
 require 'SecureRandom'
-require_relative '../lib/TrelloFactory'
-require_relative '../lib/TrelloCredentials'
-require_relative '../lib/CompletedCardFactory'
-require_relative '../lib/CardRepository'
-require_relative '../lib/AverageCycleTimeCalculator'
+require_relative '../lib/TrelloCycleTime'
 
 class CycleTimeTests < Test::Unit::TestCase	
 	include AgileTrello
@@ -235,38 +231,5 @@ class FakeTrello
 
 	def get_board(board_id)
 		@boards[board_id]
-	end
-end
-
-module AgileTrello
-	class TrelloCycleTime
-		def initialize(trello_factory = TrelloFactory.new, parameters = {}) 
-			trello_credentials = TrelloCredentials.new(parameters[:public_key], parameters[:access_token])
-			@trello = trello_factory.create(trello_credentials) 
-			@average_cycle_time_calculator = AverageCycleTimeCalculator.new
-		end
-
-		def get(parameters)
-			completed_card_repository = CompletedCardRepository.new(@trello, parameters)
-			finished_cards = completed_card_repository.get
-			finished_cards.each do |card|
-				@average_cycle_time_calculator.add(card.cycle_time)
-			end
-			return @average_cycle_time_calculator.average
-		end
-	end
-
-	class CompletedCardRepository
-		def initialize(trello, parameters)
-			@card_repository = CardRepository.new(trello, parameters)
-			@completed_card_factory = CompletedCardFactory.new(start_list: parameters[:start_list], end_list: parameters[:end_list])
-		end
-
-		def get
-			completed_cards = @card_repository.get_cards_after
-			completed_cards.map do |card|
-				@completed_card_factory.create(card)
-			end
-		end
 	end
 end
