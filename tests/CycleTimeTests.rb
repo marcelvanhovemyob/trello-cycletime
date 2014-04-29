@@ -11,14 +11,14 @@ class CycleTimeTests < Test::Unit::TestCase
 	def test_user_connects_to_trello_with_public_key
 		public_key = SecureRandom.uuid
 		mockTrelloFactory = self
-		TrelloCycleTime.new(mockTrelloFactory, public_key: public_key) 
+		TrelloCycleTime.new(trello_factory: mockTrelloFactory, public_key: public_key) 
 		expect(@trello_credentials.public_key).to eql(public_key)
 	end 
 
 	def test_user_connects_to_trello_with_access_token
 		access_token = SecureRandom.uuid
 		mockTrelloFactory = self
-		TrelloCycleTime.new(mockTrelloFactory, access_token: access_token) 
+		TrelloCycleTime.new(trello_factory: mockTrelloFactory, access_token: access_token) 
 		expect(@trello_credentials.access_token).to eql(access_token)
 	end 
 
@@ -27,7 +27,7 @@ class CycleTimeTests < Test::Unit::TestCase
 		board_with_no_lists = FakeBoard.new
 		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_no_lists)
 		mockTrelloFactory = self
-		trello_cycle_time = TrelloCycleTime.new(mockTrelloFactory)
+		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
 		trello_cycle_time.get(board_id: board_id).should eql(0)
 	end
 
@@ -37,7 +37,7 @@ class CycleTimeTests < Test::Unit::TestCase
 		board_with_no_cards.add(FakeList.new('a list'))
 		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_no_cards)
 		mockTrelloFactory = self
-		trello_cycle_time = TrelloCycleTime.new(mockTrelloFactory)
+		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
 		trello_cycle_time.get(board_id: board_id, end_list: '').should eql(0)
 	end
 
@@ -57,7 +57,7 @@ class CycleTimeTests < Test::Unit::TestCase
 		board_with_start_and_end_lists.add(end_list)
 		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_start_and_end_lists)
 		mockTrelloFactory = self
-		trello_cycle_time = TrelloCycleTime.new(mockTrelloFactory)
+		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
 		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(2.0)
 	end
 
@@ -77,7 +77,7 @@ class CycleTimeTests < Test::Unit::TestCase
 		board_with_start_and_end_lists.add(end_list)
 		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_start_and_end_lists)
 		mockTrelloFactory = self
-		trello_cycle_time = TrelloCycleTime.new(mockTrelloFactory)
+		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
 		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(2.54)
 	end
 
@@ -102,7 +102,7 @@ class CycleTimeTests < Test::Unit::TestCase
 		board_with_start_and_end_lists.add(end_list)
 		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_start_and_end_lists)
 		mockTrelloFactory = self
-		trello_cycle_time = TrelloCycleTime.new(mockTrelloFactory)
+		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
 		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(3.0)
 	end
 
@@ -128,7 +128,7 @@ class CycleTimeTests < Test::Unit::TestCase
 		board_with_start_and_end_lists.add(end_list)
 		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_start_and_end_lists)
 		mockTrelloFactory = self
-		trello_cycle_time = TrelloCycleTime.new(mockTrelloFactory)
+		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
 		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(4.0)
 	end
 
@@ -156,7 +156,7 @@ class CycleTimeTests < Test::Unit::TestCase
 		board_with_list_after_end_list.add(after_list)
 		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_list_after_end_list)
 		mockTrelloFactory = self
-		trello_cycle_time = TrelloCycleTime.new(mockTrelloFactory)
+		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
 		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(3.0)
 	end
 

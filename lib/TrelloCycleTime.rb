@@ -5,8 +5,9 @@ require_relative './CompletedCardRepository'
 
 module AgileTrello
 	class TrelloCycleTime
-		def initialize(trello_factory = TrelloFactory.new, parameters = {}) 
+		def initialize(parameters = {}) 
 			trello_credentials = TrelloCredentials.new(parameters[:public_key], parameters[:access_token])
+			trello_factory = parameters[:trello_factory].nil? ? TrelloFactory.new : parameters[:trello_factory]
 			@trello = trello_factory.create(trello_credentials) 
 			@average_cycle_time_calculator = AverageCycleTimeCalculator.new
 		end
