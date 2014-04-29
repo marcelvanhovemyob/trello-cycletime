@@ -42,7 +42,7 @@ class CycleTimeTests < Test::Unit::TestCase
 		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_no_cards)
 		mockTrelloFactory = self
 		trello_cycle_time = TrelloCycleTime.new(mockTrelloFactory)
-		trello_cycle_time.get(board_id: board_id).should eql(0)
+		trello_cycle_time.get(board_id: board_id, end_list: '').should eql(0)
 	end
 
 	def test_cycle_time_returned_when_board_has_both_start_and_end_lists_and_card_is_in_end_list
@@ -108,6 +108,32 @@ class CycleTimeTests < Test::Unit::TestCase
 		mockTrelloFactory = self
 		trello_cycle_time = TrelloCycleTime.new(mockTrelloFactory)
 		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(3.0)
+	end
+
+	def test_average_cycle_time_of_cards_returned_does_not_include_those_before_end_list
+		board_id = SecureRandom.uuid
+		start_list_name = 'start list'
+		end_list_name = 'end list'
+		today = Time.now
+		two_day_cycle_time_card = FakeCard.new 
+		two_days_ago = today - (ONE_DAY * 2)
+		two_day_cycle_time_card.add_movement(list_name: start_list_name, date: two_days_ago)
+		two_day_cycle_time_card.add_movement(list_name: end_list_name, date: today)
+		four_day_cycle_time_card = FakeCard.new 
+		four_days_ago = today - (ONE_DAY * 4)
+		four_day_cycle_time_card.add_movement(list_name: start_list_name, date: four_days_ago)
+		four_day_cycle_time_card.add_movement(list_name: end_list_name, date: today)
+		board_with_start_and_end_lists = FakeBoard.new
+		start_list = FakeList.new(start_list_name)
+		start_list.add(two_day_cycle_time_card)
+		board_with_start_and_end_lists.add(start_list)
+		end_list = FakeList.new(end_list_name)
+		end_list.add(four_day_cycle_time_card)
+		board_with_start_and_end_lists.add(end_list)
+		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_start_and_end_lists)
+		mockTrelloFactory = self
+		trello_cycle_time = TrelloCycleTime.new(mockTrelloFactory)
+		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(4.0)
 	end
 
 	def create(trello_credentials)
