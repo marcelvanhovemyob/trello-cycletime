@@ -5,6 +5,7 @@ require_relative '../lib/TrelloFactory'
 require_relative '../lib/TrelloCredentials'
 require_relative '../lib/CompletedCardFactory'
 require_relative '../lib/CardRepository'
+require_relative '../lib/AverageCycleTimeCalculator'
 
 class CycleTimeTests < Test::Unit::TestCase	
 	include AgileTrello
@@ -198,21 +199,6 @@ module AgileTrello
 				@average_cycle_time_calculator.add(card.cycle_time)
 			end
 			return @average_cycle_time_calculator.average
-		end
-	end
-
-	class AverageCycleTimeCalculator
-		def initialize
-			@cycle_times = []
-		end
-
-		def add(cycle_time)
-			@cycle_times.push(cycle_time)
-		end
-
-		def average
-			return 0 if @cycle_times.length == 0
-			@cycle_times.reduce(:+) / @cycle_times.length
 		end
 	end
 
