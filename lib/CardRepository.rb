@@ -7,8 +7,10 @@ module AgileTrello
 
 		def get_cards_after
 			cards_after = []
+			ignore = true
 			@trello_board.lists.each do | list | 
-				if list.name.include? (@end_list)
+				ignore = !list.name.include?(@end_list) if ignore
+				if !ignore
 					list.cards.each do | card |
 						cards_after.push(card)
 					end
