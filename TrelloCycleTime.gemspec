@@ -5,8 +5,7 @@ Gem::Specification.new do |spec|
   spec.authors     = ["iainjmitchell"]
   spec.email       = 'iainjmitchell@gmail.com'
   spec.files       = ["lib/TrelloCycleTime.rb"]
-  spec.homepage    =
-    'https://github.com/code-computerlove/trello-cycletime'
+  spec.homepage    = 'https://github.com/code-computerlove/trello-cycletime'
   spec.license       = 'MIT'
   spec.add_runtime_dependency 'ruby-trello' 
   spec.add_runtime_dependency 'peach'
