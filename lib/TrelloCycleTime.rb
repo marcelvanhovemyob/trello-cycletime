@@ -1,3 +1,4 @@
+require 'peach'
 require_relative './TrelloFactory'
 require_relative './TrelloCredentials'
 require_relative './AverageCycleTimeCalculator'
@@ -15,7 +16,7 @@ module AgileTrello
 		def get(parameters)
 			completed_card_repository = CompletedCardRepository.new(@trello, parameters)
 			finished_cards = completed_card_repository.get
-			finished_cards.each do | card |
+			finished_cards.peach do | card |
 				@average_cycle_time_calculator.add(card.cycle_time)
 			end
 			return @average_cycle_time_calculator.average

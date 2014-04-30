@@ -14,7 +14,7 @@ module AgileTrello
 		end
 
 		def create(trello_card)
-			card_history = CardHistory.new(trello_card)
+			card_history = CardHistory.new(trello_card, @all_lists)
 			start_date = card_history.find_date_entered_list(@start_list)
 			end_date = card_history.find_date_entered_list(@end_list)
 			CompletedCard.new(start_date, end_date)

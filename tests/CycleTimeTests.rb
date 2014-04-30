@@ -160,34 +160,34 @@ class CycleTimeTests < Test::Unit::TestCase
 		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(3.0)
 	end
 
-	# def test_average_cycle_time_of_cards_returned_includes_those_that_skipped_start_list
-	# 	board_id = SecureRandom.uuid
-	# 	start_list_name = 'start list'
-	# 	middle_list_name = 'middle list'
-	# 	end_list_name = 'end list'
-	# 	after_list_name = 'after list'
-	# 	today = Time.now
-	# 	two_day_card_skipped_start_list = FakeCard.new 
-	# 	two_days_ago = today - (ONE_DAY * 2)
-	# 	two_day_card_skipped_start_list.add_movement(list_name: middle_list_name, date: two_days_ago)
-	# 	two_day_card_skipped_start_list.add_movement(list_name: end_list_name, date: today)
-	# 	four_day_cycle_time_card = FakeCard.new 
-	# 	four_days_ago = today - (ONE_DAY * 4)
-	# 	four_day_cycle_time_card.add_movement(list_name: start_list_name, date: four_days_ago)
-	# 	four_day_cycle_time_card.add_movement(list_name: end_list_name, date: today)
-	# 	board_with_list_after_end_list = FakeBoard.new
-	# 	board_with_list_after_end_list.add(FakeList.new(start_list_name))
-	# 	middle_list = FakeList.new(middle_list_name)
-	# 	board_with_list_after_end_list.add(middle_list)
-	# 	end_list = FakeList.new(end_list_name)
-	# 	end_list.add(two_day_card_skipped_start_list)
-	# 	end_list.add(four_day_cycle_time_card)
-	# 	board_with_list_after_end_list.add(end_list)
-	# 	@created_trello = FakeTrello.new(board_id: board_id, board: board_with_list_after_end_list)
-	# 	mockTrelloFactory = self
-	# 	trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
-	# 	trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(3.0)
-	# end
+	def test_average_cycle_time_of_cards_returned_includes_those_that_skipped_start_list
+		board_id = SecureRandom.uuid
+		start_list_name = 'start list'
+		middle_list_name = 'middle list'
+		end_list_name = 'end list'
+		after_list_name = 'after list'
+		today = Time.now
+		two_day_card_skipped_start_list = FakeCard.new 
+		two_days_ago = today - (ONE_DAY * 2)
+		two_day_card_skipped_start_list.add_movement(list_name: middle_list_name, date: two_days_ago)
+		two_day_card_skipped_start_list.add_movement(list_name: end_list_name, date: today)
+		four_day_cycle_time_card = FakeCard.new 
+		four_days_ago = today - (ONE_DAY * 4)
+		four_day_cycle_time_card.add_movement(list_name: start_list_name, date: four_days_ago)
+		four_day_cycle_time_card.add_movement(list_name: end_list_name, date: today)
+		board_with_list_after_end_list = FakeBoard.new
+		board_with_list_after_end_list.add(FakeList.new(start_list_name))
+		middle_list = FakeList.new(middle_list_name)
+		board_with_list_after_end_list.add(middle_list)
+		end_list = FakeList.new(end_list_name)
+		end_list.add(two_day_card_skipped_start_list)
+		end_list.add(four_day_cycle_time_card)
+		board_with_list_after_end_list.add(end_list)
+		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_list_after_end_list)
+		mockTrelloFactory = self
+		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
+		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(3.0)
+	end
 
 	def create(trello_credentials)
 		@trello_credentials = trello_credentials
