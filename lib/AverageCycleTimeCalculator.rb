@@ -10,7 +10,7 @@ module AgileTrello
 
 		def average
 			return 0 if @cycle_times.length == 0
-			@cycle_times.reduce(:+) / @cycle_times.length
+			(@cycle_times.reduce(:+) / @cycle_times.length).round(2)
 		end
 	end
 end

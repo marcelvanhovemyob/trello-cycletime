@@ -81,6 +81,31 @@ class CycleTimeTests < Test::Unit::TestCase
 		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(2.54)
 	end
 
+	def test_cycle_time_returned_rounded_to_2_decimial_places_when_board_has_multiple_cards_with_odd_times
+		board_id = SecureRandom.uuid
+		start_list_name = 'start list'
+		end_list_name = 'end list'
+		today = Time.now
+		odd_card_one = FakeCard.new 
+		two_and_a_bit_days_ago = today - (ONE_DAY * 2.5411111)
+		odd_card_one.add_movement(list_name: start_list_name, date: two_and_a_bit_days_ago)
+		odd_card_one.add_movement(list_name: end_list_name, date: today)
+		odd_card_two = FakeCard.new 
+		three_and_a_bit_days_ago = today - (ONE_DAY * 3.94234234)
+		odd_card_two.add_movement(list_name: start_list_name, date: three_and_a_bit_days_ago)
+		odd_card_two.add_movement(list_name: end_list_name, date: today)
+		board_with_start_and_end_lists = FakeBoard.new
+		board_with_start_and_end_lists.add(FakeList.new(start_list_name))
+		end_list = FakeList.new(end_list_name)
+		end_list.add(odd_card_one)
+		end_list.add(odd_card_two)
+		board_with_start_and_end_lists.add(end_list)
+		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_start_and_end_lists)
+		mockTrelloFactory = self
+		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
+		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(3.24)
+	end
+
 	def test_average_cycle_time_of_cards_returned_when_board_has_both_start_and_end_lists_and_multiple_cards_is_in_end_list
 		board_id = SecureRandom.uuid
 		start_list_name = 'start list'
