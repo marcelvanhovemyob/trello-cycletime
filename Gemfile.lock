@@ -1,23 +1,21 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (4.1.0)
-      activesupport (= 4.1.0)
-      builder (~> 3.1)
-    activesupport (4.1.0)
-      i18n (~> 0.6, >= 0.6.9)
-      json (~> 1.7, >= 1.7.7)
-      minitest (~> 5.1)
-      thread_safe (~> 0.1)
-      tzinfo (~> 1.1)
+    activemodel (3.2.17)
+      activesupport (= 3.2.17)
+      builder (~> 3.0.0)
+    activesupport (3.2.17)
+      i18n (~> 0.6, >= 0.6.4)
+      multi_json (~> 1.0)
     addressable (2.3.6)
-    builder (3.2.2)
+    builder (3.0.4)
     diff-lcs (1.2.5)
     git_repository (0.0.11)
     i18n (0.6.9)
     json (1.8.1)
     mime-types (2.2)
-    minitest (5.3.3)
+    minitest (4.0.0)
+    multi_json (1.9.3)
     oauth (0.4.7)
     peach (0.5.1)
     rest-client (1.6.7)
@@ -30,15 +28,13 @@ GEM
       json
       oauth (~> 0.4.5)
       rest-client (~> 1.6.7)
-    thread_safe (0.3.3)
-    tzinfo (1.1.0)
-      thread_safe (~> 0.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   git_repository
+  minitest (~> 4.0)
   peach
   rspec-expectations
   ruby-trello
