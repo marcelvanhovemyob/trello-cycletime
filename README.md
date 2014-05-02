@@ -3,7 +3,7 @@ trello-cycletime
 
 Calculates cycle time from cards on a trello board
 
-[![Build Status](https://drone.io/github.com/code-computerlove/code-dashboard/status.png)](https://drone.io/github.com/code-computerlove/code-dashboard/latest)
+[![Build Status](https://drone.io/github.com/code-computerlove/trello-cycletime/status.png)](https://drone.io/github.com/code-computerlove/trello-cycletime/latest)
 
 ##Introduction
 
