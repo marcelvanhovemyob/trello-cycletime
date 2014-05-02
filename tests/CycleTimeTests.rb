@@ -1,6 +1,5 @@
 require 'test/unit'
 require 'rspec-expectations'
-require 'SecureRandom'
 require_relative '../lib/TrelloCycleTime'
 
 class CycleTimeTests < Test::Unit::TestCase	
