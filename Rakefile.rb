@@ -11,7 +11,7 @@ task :test do
 	TEST_FILE_PATTERN = 'tests/**/*.rb'
 	Dir[TEST_FILE_PATTERN].peach do | test_file_name |
 		puts ">> Running tests on: #{test_file_name}"
-		sh "ruby #{test_file_name}"
+		sh "bundle exec ruby #{test_file_name}"
 	end
 end
 
