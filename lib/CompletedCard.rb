@@ -7,5 +7,9 @@ module AgileTrello
 		def initialize(start_date, end_date)
 			@cycle_time = ((end_date - start_date) / SECONDS_IN_24HRS).round(2)
 		end
+
+		def shareCycleTimeWith(calculator)
+			calculator.add(@cycle_time)
+		end
 	end
 end

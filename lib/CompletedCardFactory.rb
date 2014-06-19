@@ -11,6 +11,7 @@ module AgileTrello
 			@start_list = parameters[:start_list]
 			@end_list = parameters[:end_list]
 			@all_lists = parameters[:all_lists]
+			@average_cycle_time_calculator = parameters[:average_cycle_time_calculator]
 		end
 
 		def create(trello_card)
