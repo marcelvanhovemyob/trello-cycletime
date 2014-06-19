@@ -1,7 +1,7 @@
 require_relative './TrelloFactory'
 require_relative './TrelloCredentials'
 require_relative './AverageCycleTimeCalculator'
-require_relative './CompletedCardRepository'
+require_relative './CompletedCards'
 require_relative './TrelloListRepository'
 
 module AgileTrello
@@ -11,11 +11,11 @@ module AgileTrello
 			trello_factory = parameters[:trello_factory].nil? ? TrelloFactory.new : parameters[:trello_factory]
 			trello = trello_factory.create(trello_credentials) 
 			@average_cycle_time_calculator = AverageCycleTimeCalculator.new
-			@completed_card_repository = CompletedCardRepository.new(trello, @average_cycle_time_calculator, TrelloListRepository.new(trello))
+			@completed_cards = CompletedCards.new(trello, @average_cycle_time_calculator, TrelloListRepository.new(trello))
 		end
 
 		def get(parameters)
-			@completed_card_repository.get(parameters)
+			@completed_cards.retrieve(parameters)
 			return @average_cycle_time_calculator.average
 		end
 	end

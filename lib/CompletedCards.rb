@@ -2,14 +2,14 @@ require_relative './CompletedCardFactory'
 require_relative './BoardCardRepositoryFactory'
 
 module AgileTrello
-	class CompletedCardRepository
+	class CompletedCards
 		def initialize(trello, average_cycle_time_calculator, trello_list_repository)
 			@board_card_repository_factory = BoardCardRepositoryFactory.new(trello)
 			@trello_list_repository = trello_list_repository
 			@average_cycle_time_calculator = average_cycle_time_calculator
 		end
 
-		def get(parameters)
+		def retrieve(parameters)
 			board_id = parameters[:board_id]
 			end_list = parameters[:end_list]
 
