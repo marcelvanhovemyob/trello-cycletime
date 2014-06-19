@@ -3,7 +3,7 @@ require_relative './BoardCardRepositoryFactory'
 
 module AgileTrello
 	class CompletedCardRepository
-		def initialize(trello, average_cycle_time_calculator, trello_list_repository, parameters)
+		def initialize(trello, average_cycle_time_calculator, trello_list_repository)
 			@board_card_repository_factory = BoardCardRepositoryFactory.new(trello)
 			@trello_list_repository = trello_list_repository
 			@average_cycle_time_calculator = average_cycle_time_calculator

@@ -16,7 +16,7 @@ module AgileTrello
 		end
 
 		def get(parameters)
-			completed_card_repository = CompletedCardRepository.new(@trello, @average_cycle_time_calculator, @trello_list_repository, parameters)
+			completed_card_repository = CompletedCardRepository.new(@trello, @average_cycle_time_calculator, @trello_list_repository)
 			completed_card_repository.get(parameters)
 			return @average_cycle_time_calculator.average
 		end
