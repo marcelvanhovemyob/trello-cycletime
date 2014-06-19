@@ -1,5 +1,5 @@
 require_relative './CompletedCardFactory'
-require_relative './BoardCardRepository'
+require_relative './BoardCardRepositoryFactory'
 
 module AgileTrello
 	class CompletedCardRepository
