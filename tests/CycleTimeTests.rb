@@ -27,7 +27,7 @@ class CycleTimeTests < Test::Unit::TestCase
 		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_no_lists)
 		mockTrelloFactory = self
 		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
-		trello_cycle_time.get(board_id: board_id).should eql(0)
+		trello_cycle_time.get(board_id: board_id).cycle_time.should eql(0)
 	end
 
 	def test_zero_returned_when_board_has_lists_but_no_cards
@@ -37,7 +37,7 @@ class CycleTimeTests < Test::Unit::TestCase
 		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_no_cards)
 		mockTrelloFactory = self
 		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
-		trello_cycle_time.get(board_id: board_id, end_list: '').should eql(0)
+		trello_cycle_time.get(board_id: board_id, end_list: '').cycle_time.should eql(0)
 	end
 
 	def test_cycle_time_returned_when_board_has_both_start_and_end_lists_and_card_is_in_end_list
@@ -57,7 +57,7 @@ class CycleTimeTests < Test::Unit::TestCase
 		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_start_and_end_lists)
 		mockTrelloFactory = self
 		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
-		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(2.0)
+		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).cycle_time.should eql(2.0)
 	end
 
 	def test_cycle_time_returned_rounded_to_2_decimial_places_when_board_has_both_start_and_end_lists_and_card_is_in_end_list
@@ -77,7 +77,7 @@ class CycleTimeTests < Test::Unit::TestCase
 		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_start_and_end_lists)
 		mockTrelloFactory = self
 		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
-		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(2.54)
+		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).cycle_time.should eql(2.54)
 	end
 
 	def test_cycle_time_returned_rounded_to_2_decimial_places_when_board_has_multiple_cards_with_odd_times
@@ -102,7 +102,7 @@ class CycleTimeTests < Test::Unit::TestCase
 		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_start_and_end_lists)
 		mockTrelloFactory = self
 		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
-		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(3.24)
+		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).cycle_time.should eql(3.24)
 	end
 
 	def test_average_cycle_time_of_cards_returned_when_board_has_both_start_and_end_lists_and_multiple_cards_is_in_end_list
@@ -127,7 +127,7 @@ class CycleTimeTests < Test::Unit::TestCase
 		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_start_and_end_lists)
 		mockTrelloFactory = self
 		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
-		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(3.0)
+		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).cycle_time.should eql(3.0)
 	end
 
 	def test_average_cycle_time_of_cards_returned_does_not_include_those_before_end_list
@@ -153,7 +153,7 @@ class CycleTimeTests < Test::Unit::TestCase
 		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_start_and_end_lists)
 		mockTrelloFactory = self
 		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
-		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(4.0)
+		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).cycle_time.should eql(4.0)
 	end
 
 	def test_average_cycle_time_of_cards_returned_does_include_those_after_end_list
@@ -181,7 +181,7 @@ class CycleTimeTests < Test::Unit::TestCase
 		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_list_after_end_list)
 		mockTrelloFactory = self
 		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
-		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(3.0)
+		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).cycle_time.should eql(3.0)
 	end
 
 	def test_average_cycle_time_of_cards_returned_includes_those_that_skipped_start_list
@@ -210,7 +210,7 @@ class CycleTimeTests < Test::Unit::TestCase
 		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_list_after_end_list)
 		mockTrelloFactory = self
 		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
-		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(3.0)
+		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).cycle_time.should eql(3.0)
 	end
 
 	def test_when_measurement_start_date_specified_then_calculation_does_not_include_cards_that_entered_the_end_list_before_the_start_of_measurement_date
@@ -237,7 +237,7 @@ class CycleTimeTests < Test::Unit::TestCase
 		mockTrelloFactory = self
 		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
 		four_days_ago = today - (ONE_DAY * 4)
-		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name, measurement_start_date: four_days_ago).should eql(2.0)
+		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name, measurement_start_date: four_days_ago).cycle_time.should eql(2.0)
 	end
 
 	def create(trello_credentials)
