@@ -16,15 +16,15 @@ module AgileTrello
 
 		def get(parameters)
 			@completed_cards.retrieve(parameters)
-			return BoardCycleTime.new(@average_cycle_time_calculator.average)
+			return CycleTime.new(@average_cycle_time_calculator.average)
 		end
 	end
 
-	class BoardCycleTime 
-		attr_reader :cycle_time
+	class CycleTime 
+		attr_reader :mean
 
-		def initialize(cycle_time)
-			@cycle_time = cycle_time
+		def initialize(mean)
+			@mean = mean
 		end
 	end
 end
