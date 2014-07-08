@@ -11,14 +11,26 @@ module AgileTrello
 			@start_list = parameters[:start_list]
 			@end_list = parameters[:end_list]
 			@all_lists = parameters[:all_lists]
-			@average_cycle_time_calculator = parameters[:average_cycle_time_calculator]
+			@measurement_start_date = 
+				parameters[:measurement_start_date].nil? ? Time.new(1066) : parameters[:measurement_start_date]
 		end
 
 		def create(trello_card)
 			card_history = CardHistory.new(trello_card, @all_lists)
-			start_date = card_history.find_date_entered_list(@start_list)
 			end_date = card_history.find_date_entered_list(@end_list)
-			CompletedCard.new(start_date, end_date)
+			is_in_measured_period = end_date > @measurement_start_date
+
+			if (is_in_measured_period)
+				start_date = card_history.find_date_entered_list(@start_list)
+				CompletedCard.new(start_date, end_date)
+			else
+				CardBeforeMeasurementPeriod.new
+			end
+		end
+	end
+
+	class CardBeforeMeasurementPeriod
+		def shareCycleTimeWith(calculator)
 		end
 	end
 end

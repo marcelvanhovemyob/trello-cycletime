@@ -213,32 +213,32 @@ class CycleTimeTests < Test::Unit::TestCase
 		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name).should eql(3.0)
 	end
 
-	# def test_when_measurement_start_date_specified_then_calculation_does_not_include_cards_that_entered_the_end_list_before_the_start_of_measurement_date
-	# 	board_id = SecureRandom.uuid
-	# 	start_list_name = 'start list'
-	# 	end_list_name = 'end list'
-	# 	card_inside_period = FakeCard.new 
-	# 	today = Time.now
-	# 	two_days_ago = today - (ONE_DAY * 2)
-	# 	card_inside_period.add_movement(list_name: start_list_name, date: two_days_ago)
-	# 	card_inside_period.add_movement(list_name: end_list_name, date: today)
-	# 	card_outside_period = FakeCard.new 
-	# 	five_days_ago = today - (ONE_DAY * 5)
-	# 	six_days_ago = today - (ONE_DAY * 6)
-	# 	card_outside_period.add_movement(list_name: start_list_name, date: six_days_ago)
-	# 	card_outside_period.add_movement(list_name: end_list_name, date: five_days_ago)
-	# 	board_with_start_and_end_lists = FakeBoard.new
-	# 	board_with_start_and_end_lists.add(FakeList.new(start_list_name))
-	# 	end_list = FakeList.new(end_list_name)
-	# 	end_list.add(card_inside_period)
-	# 	end_list.add(card_outside_period)
-	# 	board_with_start_and_end_lists.add(end_list)
-	# 	@created_trello = FakeTrello.new(board_id: board_id, board: board_with_start_and_end_lists)
-	# 	mockTrelloFactory = self
-	# 	trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
-	# 	four_days_ago = today - (ONE_DAY * 4)
-	# 	trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name, measurement_start_date: four_days_ago).should eql(2.0)
-	# end
+	def test_when_measurement_start_date_specified_then_calculation_does_not_include_cards_that_entered_the_end_list_before_the_start_of_measurement_date
+		board_id = SecureRandom.uuid
+		start_list_name = 'start list'
+		end_list_name = 'end list'
+		card_inside_period = FakeCard.new 
+		today = Time.now
+		two_days_ago = today - (ONE_DAY * 2)
+		card_inside_period.add_movement(list_name: start_list_name, date: two_days_ago)
+		card_inside_period.add_movement(list_name: end_list_name, date: today)
+		card_outside_period = FakeCard.new 
+		five_days_ago = today - (ONE_DAY * 5)
+		six_days_ago = today - (ONE_DAY * 6)
+		card_outside_period.add_movement(list_name: start_list_name, date: six_days_ago)
+		card_outside_period.add_movement(list_name: end_list_name, date: five_days_ago)
+		board_with_start_and_end_lists = FakeBoard.new
+		board_with_start_and_end_lists.add(FakeList.new(start_list_name))
+		end_list = FakeList.new(end_list_name)
+		end_list.add(card_inside_period)
+		end_list.add(card_outside_period)
+		board_with_start_and_end_lists.add(end_list)
+		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_start_and_end_lists)
+		mockTrelloFactory = self
+		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
+		four_days_ago = today - (ONE_DAY * 4)
+		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name, measurement_start_date: four_days_ago).should eql(2.0)
+	end
 
 	def create(trello_credentials)
 		@trello_credentials = trello_credentials
