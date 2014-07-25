@@ -278,6 +278,31 @@ class CycleTimeTests < Test::Unit::TestCase
 		cycle_time.standard_deviation.should eql(1.0)
 	end
 
+	def test_when_cards_cycle_time_result_in_standard_deviation_above_2_decimal_places_Then_standard_deviation_is_rounded_to_2_decimal_places
+		board_id = SecureRandom.uuid
+		start_list_name = 'start list'
+		end_list_name = 'end list'
+		board_with_start_and_end_lists = FakeBoard.new
+		board_with_start_and_end_lists.add(FakeList.new(start_list_name))
+		end_list = FakeList.new(end_list_name)
+		fake_card1 = FakeCardBuilder.create
+			.moved_to(start_list_name).days_ago(2.4)
+			.moved_to(end_list_name).today
+			.build
+		fake_card2 = FakeCardBuilder.create
+			.moved_to(start_list_name).days_ago(6.1)
+			.moved_to(end_list_name).days_ago(2)
+			.build
+		end_list.add(fake_card1)
+		end_list.add(fake_card2)
+		board_with_start_and_end_lists.add(end_list)
+		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_start_and_end_lists)
+		mockTrelloFactory = self
+		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
+		cycle_time = trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name)
+		cycle_time.standard_deviation.should eql(0.85)
+	end
+
 	def create(trello_credentials)
 		@trello_credentials = trello_credentials
 		@created_trello
@@ -327,9 +352,6 @@ class FakeCardBuilder
 		end
 	end
 end
-
-
-
 
 class FakeBoard
 	attr_reader :lists 

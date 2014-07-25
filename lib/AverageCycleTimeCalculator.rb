@@ -20,7 +20,7 @@ module AgileTrello
 				(cycle_time - mean) ** 2
 			end
 			variance = squared_deviations.reduce(:+) / squared_deviations.length
-			standard_deviation = Math.sqrt(variance)
+			standard_deviation = Math.sqrt(variance).round(2)
 		end
 	end
 end
