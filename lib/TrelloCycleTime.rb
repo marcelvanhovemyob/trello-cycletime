@@ -1,6 +1,7 @@
 require_relative './TrelloFactory'
 require_relative './TrelloCredentials'
 require_relative './AverageCycleTimeCalculator'
+require_relative './StandardDeviationCalculator'
 require_relative './CompletedCards'
 require_relative './TrelloListRepository'
 
