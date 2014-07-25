@@ -11,12 +11,13 @@ module AgileTrello
 			trello_factory = parameters[:trello_factory].nil? ? TrelloFactory.new : parameters[:trello_factory]
 			trello = trello_factory.create(trello_credentials) 
 			@average_cycle_time_calculator = AverageCycleTimeCalculator.new
-			@completed_cards = CompletedCards.new(trello, @average_cycle_time_calculator, TrelloListRepository.new(trello))
+			@standard_deviation_calculator = StandardDeviationCalculator.new(@average_cycle_time_calculator)
+			@completed_cards = CompletedCards.new(trello, @standard_deviation_calculator, TrelloListRepository.new(trello))
 		end
 
 		def get(parameters)
 			@completed_cards.retrieve(parameters)
-			return CycleTime.new(@average_cycle_time_calculator.average, @average_cycle_time_calculator.standard_deviation)
+			return CycleTime.new(@average_cycle_time_calculator.average, @standard_deviation_calculator.standard_deviation)
 		end
 	end
 
