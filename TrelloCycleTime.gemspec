@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name        = 'TrelloCycleTime'
-  spec.version     = '1.0.3'
+  spec.version     = '1.0.4'
   spec.summary     = "Calculates cycle time from cards on a trello board"
   spec.authors     = ["iainjmitchell"]
   spec.email       = 'iainjmitchell@gmail.com'

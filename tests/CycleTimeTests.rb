@@ -44,7 +44,6 @@ class CycleTimeTests < Test::Unit::TestCase
 		board_id = SecureRandom.uuid
 		start_list_name = 'start list'
 		end_list_name = 'end list'
-
 		board_with_start_and_end_lists = FakeBoard.new
 		board_with_start_and_end_lists.add(FakeList.new(start_list_name))
 		end_list = FakeList.new(end_list_name)
@@ -227,6 +226,56 @@ class CycleTimeTests < Test::Unit::TestCase
 		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
 		four_days_ago = Time.now - (ONE_DAY * 4)
 		trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name, measurement_start_date: four_days_ago).mean.should eql(2.0)
+	end
+
+	def test_two_cards_with_same_cycle_time_results_in_standard_deviation_of_0
+		board_id = SecureRandom.uuid
+		start_list_name = 'start list'
+		end_list_name = 'end list'
+		board_with_start_and_end_lists = FakeBoard.new
+		board_with_start_and_end_lists.add(FakeList.new(start_list_name))
+		end_list = FakeList.new(end_list_name)
+		fake_card1 = FakeCardBuilder.create
+			.moved_to(start_list_name).days_ago(2)
+			.moved_to(end_list_name).today
+			.build
+		fake_card2 = FakeCardBuilder.create
+			.moved_to(start_list_name).days_ago(4)
+			.moved_to(end_list_name).days_ago(2)
+			.build
+		end_list.add(fake_card1)
+		end_list.add(fake_card2)
+		board_with_start_and_end_lists.add(end_list)
+		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_start_and_end_lists)
+		mockTrelloFactory = self
+		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
+		cycle_time = trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name)
+		cycle_time.standard_deviation.should eql(0.0)
+	end
+
+	def test_when_one_card_cycle_time_of_2_And_one_card_cycle_time_of_4_Then_standard_deviation_of_1
+		board_id = SecureRandom.uuid
+		start_list_name = 'start list'
+		end_list_name = 'end list'
+		board_with_start_and_end_lists = FakeBoard.new
+		board_with_start_and_end_lists.add(FakeList.new(start_list_name))
+		end_list = FakeList.new(end_list_name)
+		fake_card1 = FakeCardBuilder.create
+			.moved_to(start_list_name).days_ago(2)
+			.moved_to(end_list_name).today
+			.build
+		fake_card2 = FakeCardBuilder.create
+			.moved_to(start_list_name).days_ago(6)
+			.moved_to(end_list_name).days_ago(2)
+			.build
+		end_list.add(fake_card1)
+		end_list.add(fake_card2)
+		board_with_start_and_end_lists.add(end_list)
+		@created_trello = FakeTrello.new(board_id: board_id, board: board_with_start_and_end_lists)
+		mockTrelloFactory = self
+		trello_cycle_time = TrelloCycleTime.new(trello_factory: mockTrelloFactory)
+		cycle_time = trello_cycle_time.get(board_id: board_id, start_list: start_list_name, end_list: end_list_name)
+		cycle_time.standard_deviation.should eql(1.0)
 	end
 
 	def create(trello_credentials)

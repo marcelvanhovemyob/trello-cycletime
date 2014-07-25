@@ -36,7 +36,7 @@ or adding the following to your Gemfile
 	    end_list: 'Ready for Release'
     )
 
-    puts average_cycle_time
+    puts average_cycle_time.mean
     
 ##Trello Gotchas
 You can get the access_token key by going to this url in your browser:
