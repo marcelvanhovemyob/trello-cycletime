@@ -1,4 +1,3 @@
-require 'peach'
 require_relative './CompletedCardFactory'
 require_relative './BoardCardRepositoryFactory'
 
@@ -23,7 +22,7 @@ module AgileTrello
 			@board_card_repository_factory
 				.create(board_id)
 				.get_cards_after(end_list)
-				.peach do |card|
+				.each do |card|
 					completed_card_for_board_factory
 						.create(card)
 						.shareCycleTimeWith(@cycle_time_store)
