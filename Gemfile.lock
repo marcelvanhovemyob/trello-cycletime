@@ -18,7 +18,7 @@ GEM
     multi_json (1.10.1)
     oauth (0.4.7)
     peach (0.5.1)
-    rdoc (4.1.1)
+    rdoc (4.1.2)
       json (~> 1.4)
     rest-client (1.6.8)
       mime-types (~> 1.16)
@@ -31,6 +31,9 @@ GEM
       json
       oauth (~> 0.4.5)
       rest-client (~> 1.6.7)
+    trello-factory (1.0.0)
+      peach
+      ruby-trello
 
 PLATFORMS
   ruby
@@ -41,3 +44,4 @@ DEPENDENCIES
   peach
   rspec-expectations (= 2.14.5)
   ruby-trello
+  trello-factory

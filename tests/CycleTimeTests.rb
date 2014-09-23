@@ -2,6 +2,7 @@ require 'test/unit'
 require 'rspec-expectations'
 require_relative '../lib/TrelloCycleTime'
 
+
 class CycleTimeTests < Test::Unit::TestCase	
 	include AgileTrello
 
