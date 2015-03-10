@@ -6,8 +6,8 @@ module AgileTrello
 
 		def get(board_id)
 			trello_board = @trello.get_board(board_id)
-			trello_board.lists.map do |list|
-				list.name
+			trello_board.lists.map do |taskboard_column|
+				taskboard_column.name
 			end
 		end
 	end

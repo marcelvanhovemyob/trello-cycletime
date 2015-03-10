@@ -8,6 +8,10 @@ module AgileTrello
 			@cycle_times.push(cycle_time)
 		end
 
+		def list
+			@cycle_times
+		end
+
 		def average
 			return 0 if @cycle_times.length == 0
 			(@cycle_times.reduce(:+) / @cycle_times.length).round(2)
